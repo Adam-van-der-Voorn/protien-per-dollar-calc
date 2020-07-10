@@ -28,10 +28,11 @@ import java.util.stream.Collectors;
  * a comparator can be given to define the exact ordering of the elemements.
  * */
 
-public class Trie<T> extends AbstractTrie<T> {
+public class Trie<T> {
     private Comparator<SearchResult<T>> comparator;
     private Pattern toConcat;
     private Pattern toSkip;
+    private TrieNode<T> rootNode = new TrieNode<>(null, null);
 
     public Trie() {
         toConcat = Pattern.compile("'");
@@ -84,7 +85,7 @@ public class Trie<T> extends AbstractTrie<T> {
                     .map((e) -> e.obj)
                     .collect(Collectors.toList());
         } catch (NoAssociatedObjectsException e) {
-            return new ArrayList<T>();
+            return new ArrayList<>();
         }
     }
 
@@ -96,7 +97,7 @@ public class Trie<T> extends AbstractTrie<T> {
     public void put(String name, T associated) {
         List<String> keywords = processName(name);
         for (int i = 0; i < keywords.size(); i++) {
-            pass(keywords.get(i), new TrieNode.ObjectAssocation<T>(associated, i, keywords.size()), 0);
+            rootNode.pass(keywords.get(i), new TrieNode.ObjectAssocation<>(associated, i, keywords.size()), 0);
         }
     }
 
@@ -106,39 +107,20 @@ public class Trie<T> extends AbstractTrie<T> {
     public void remove(String name, T associated) throws NoAssociatedObjectsException {
         List<String> keywords = processName(name);
         for (String keyword : keywords) {
-            TrieNode<T> node = getNode(keyword, 0);
-            if (!node.childCharacters.isEmpty()) {
-                node.removeAssociation(associated);
-            }
-            TrieNode<T> parent = node.getParent();
-            int i = keyword.length()-1;
-            while (parent != null && parent.childCharacters.size() == 1 && parent.getAssociatedObjects().size() == 0) {
-                node = parent;
-                parent = node.getParent();
-                i--;
-            }
-            if (parent == null) {
-                childCharacters.remove(keyword.charAt(0));
-            }
-            else {
-                parent.childCharacters.remove(keyword.charAt(i));
-            }
+            removeKeyword(associated, keyword);
         }
     }
 
     public Set<T> getAll() {
-        Set<T> objs = new HashSet<>();
-        for (TrieNode<T> child : childCharacters.values()) {
-            objs.addAll(child.collect());
-        }
-        return objs;
+        return rootNode.collect();
     }
 
+    @Override
     public String toString() {
         StringBuilder str = new StringBuilder("root{");
 
         // sort children for predictability
-        List<TrieNode<T>> children = new ArrayList<>(childCharacters.values());
+        List<TrieNode<T>> children = new ArrayList<>(rootNode.getChildren());
         children.sort((a, b) -> a.getChar() - b.getChar());
 
         for (int i = 0; i < children.size(); i++) {
@@ -163,33 +145,30 @@ public class Trie<T> extends AbstractTrie<T> {
     }
 
     private Map<T, SearchResult<T>> searchForKeyword(List<String> keywords, int keywordIndex) throws NoAssociatedObjectsException{
-        TrieNode<T> topNode = getNode(keywords.get(keywordIndex), 0);
+        TrieNode<T> topNode = rootNode.getNode(keywords.get(keywordIndex), 0);
         Set<TrieNode.ObjectAssocation<T>> associations = topNode.getChildAssociations(new HashSet<>());
         return associations.stream()
                 .map((e) -> new SearchResult<>(e.obj, keywordIndex, e.keywordIndex, keywords.size(), e.nOfKeywords))
                 .collect(Collectors.toMap(SearchResult::getObj, Function.identity(), (existing, replacement) -> existing));
     }
 
-    @Override
-    void pass(String word, TrieNode.ObjectAssocation<T> associated, int index) {
-        Character nextChar = word.charAt(index);
-        TrieNode<T> nextNode;
+    private void removeKeyword(T associated, String keyword) throws NoAssociatedObjectsException {
+        TrieNode<T> node = rootNode.getNode(keyword, 0);
 
-        // if the next character is not a child of this node
-        if (!childCharacters.containsKey(nextChar)) {
-            nextNode = new TrieNode<>(nextChar, null);
-            childCharacters.put(nextChar, nextNode);
+        // case where the keyword to remove is not a leaf node,
+        // or where the keyword to remove is a leaf node with multiple associations
+        if (!node.getChildren().isEmpty() || node.getAssociatedObjects().size() > 1) {
+            node.removeAssociation(associated);
+            return;
         }
-        else {
-            nextNode = childCharacters.get(nextChar);
+
+        TrieNode<T> parent = node.getParent();
+        int i = keyword.length()-1;
+        while (parent.getChildren().size() == 1 && parent.getAssociatedObjects().size() == 0) {
+            node = parent;
+            parent = node.getParent();
+            i--;
         }
-        assert nextNode != null;
-        // if the next character is the final character
-        if (index == word.length()-1) {
-            nextNode.addAssociation(associated);
-        }
-        else {
-            nextNode.pass(word, associated, index+1);
-        }
+        parent.removeChild(keyword.charAt(i));
     }
 }

@@ -1,5 +1,7 @@
 package com.protienperdollar.redone.trie;
 
+import com.protienperdollar.redone.trie.exceptions.NoAssociatedObjectsException;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -14,7 +16,8 @@ import java.util.Set;
  * Recursive data structure that stores stops in a format that allows easy searching of them.
  * */
 
-class TrieNode<T> extends AbstractTrie<T>{
+class TrieNode<T>{
+    private Map<Character, TrieNode<T>> childCharacters = new HashMap<>();
     private final Character character;
     private Map<T, ObjectAssocation<T>> associatedObjects = new HashMap<>();
     private TrieNode<T> parent;
@@ -24,8 +27,21 @@ class TrieNode<T> extends AbstractTrie<T>{
         this.parent = parent;
     }
 
-    Character getChar() {
-        return character;
+    /**
+     * @param searchString the sequence of child characters to find
+     * @param index the index in the search string of the next character to look for
+     * @return the node in the branch that corresponds to the final character in the search string.
+     * @throws NoAssociatedObjectsException if no sequence of nodes that match the input string can be found.
+     * */
+    TrieNode<T> getNode(String searchString, int index) throws NoAssociatedObjectsException {
+        Character workingChar = searchString.charAt(index);
+        if (childCharacters.containsKey(workingChar)) {
+            if (index == searchString.length()-1) {
+                return childCharacters.get(workingChar);
+            }
+            return childCharacters.get(workingChar).getNode(searchString, index+1);
+        }
+        else throw new NoAssociatedObjectsException();
     }
 
     void addAssociation(ObjectAssocation<T> association) {
@@ -33,6 +49,14 @@ class TrieNode<T> extends AbstractTrie<T>{
     }
     void removeAssociation(T obj) {
         associatedObjects.remove(obj);
+    }
+
+    TrieNode<T> getChild(Character c) {
+        return childCharacters.get(c);
+    }
+
+    Collection<TrieNode<T>> getChildren() {
+        return Collections.unmodifiableCollection(childCharacters.values());
     }
 
     /**
@@ -52,6 +76,13 @@ class TrieNode<T> extends AbstractTrie<T>{
         return Collections.unmodifiableCollection(associatedObjects.values());
     }
 
+    /** Recursive function used to insert a new name into the trie.
+     * > if the name is one character long, the node is marked as the end of a word and the function is terminated.
+     * > otherwise:
+     * > a child node is identified that's character is the same as the first character in the input string.
+     * > if this node cannot be found, a new child node is created and given the first character of the input string.
+     * > the fist character is omitted from the input string and passed to the child node, where the process starts again.
+     * */
     void pass(String word, TrieNode.ObjectAssocation<T> associated, int index) {
         Character nextChar = word.charAt(index);
         TrieNode<T> nextNode;
@@ -85,10 +116,24 @@ class TrieNode<T> extends AbstractTrie<T>{
         return collection;
     }
 
+    TrieNode<T> getUniqueBranch(String keyword, int index, TrieNode<T> branchBase) throws NoAssociatedObjectsException {
+        Character workingChar = keyword.charAt(index);
+        if (childCharacters.containsKey(workingChar)) {
+            if (index == keyword.length()-1) {
+                return branchBase;
+            }
+            TrieNode<T> child = childCharacters.get(workingChar);
+            return child.getUniqueBranch(keyword, index+1, branchBase);
+        }
+        else throw new NoAssociatedObjectsException();
+    }
+
     TrieNode<T> getParent() {
         return parent;
     }
-
+    Character getChar() {
+        return character;
+    }
     /**
      * @return a string representing this node and all its children
      */
@@ -117,6 +162,10 @@ class TrieNode<T> extends AbstractTrie<T>{
         }
 
         return result;
+    }
+
+    public void removeChild(char c) {
+        childCharacters.remove(c);
     }
 
     static class ObjectAssocation<T> {
