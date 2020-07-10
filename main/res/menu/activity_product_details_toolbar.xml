@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/productEdit"
+        android:icon="@drawable/ic_mode_edit_black_24dp"
+        android:title="@string/ddoption_edit"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/productDelete"
+        android:icon="@drawable/ic_delete_black_24dp"
+        android:title="@string/ddoption_delete"
+        app:showAsAction="ifRoom" />
+</menu>

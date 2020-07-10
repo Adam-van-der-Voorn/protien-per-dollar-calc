@@ -1,0 +1,30 @@
+<resources>
+    <string name="app_name">Protien Per Dollar</string>
+    <string name="price_input">Price of Product</string>
+    <string name="pp100g_input">Protien per 100g</string>
+    <string name="weight_input">Weight of product (g)</string>
+    <string name="calculate_ppd_button">Calculate!</string>
+    <string name="ppd">Protien per Dollar</string>
+    <string name="save_product_button">Save Product</string>
+    <string name="product_input">Product Name</string>
+    <string name="view_saved_products_button">View Saved Products</string>
+    <string name="clear_saved_products_button">Clear Saved Products</string>
+    <string name="search_hint">search for product</string>
+    <string name="pp100g_label">Protien per 100g</string>
+    <string name="ppk_label">Price Per Kilo</string>
+    <string name="ppd_label">Protien per Dollar</string>
+    <string name="lorem_ipsum">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis leo massa, porta quis egestas nec, aliquam sit amet turpis. Proin at faucibus massa. Praesent molestie, massa eu luctus consectetur, lectus lectus tincidunt dolor, vitae varius ipsum mi quis libero. Quisque at lorem elit. In quis ligula sit amet sapien varius ornare vitae at ex. Suspendisse diam erat, pulvinar id lectus ac, volutpat viverra velit. Sed sed malesuada mauris, nec pharetra justo. Fusce et vehicula nunc. Vivamus non congue ante.
+Nam in erat volutpat, hendrerit velit nec, venenatis diam. Maecenas maximus at purus quis volutpat. Nulla ac lobortis lorem, id efficitur quam. Sed ultrices velit dolor, eu semper dui faucibus eu. Aenean semper libero massa, sit amet varius erat vehicula sed. Integer sed porttitor ligula. Mauris at velit eget nunc varius finibus. Aenean mollis eros sed feugiat lobortis. Vestibulum placerat vulputate mauris et aliquam. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Proin mollis blandit porttitor. Mauris eleifend dapibus purus et lobortis. Ut rutrum risus augue, ut ultrices urna finibus ut. Praesent non faucibus arcu.
+Sed dapibus velit ac turpis sagittis, vitae rhoncus eros placerat. Integer quis lectus venenatis, iaculis diam sed, sollicitudin neque. Aliquam erat volutpat. Nam fringilla quis tellus nec ultrices. Vivamus vel fringilla leo. Pellentesque sed ligula semper, cursus risus ultricies, placerat enim. Vestibulum faucibus nibh metus. Praesent pellentesque auctor vulputate. Mauris feugiat vulputate urna, at consectetur purus venenatis sit amet. In accumsan neque augue, et ullamcorper ex gravida at. Cras venenatis pellentesque porttitor. Mauris eu pretium nibh. Phasellus auctor tortor eget eros rutrum consequat. Pellentesque quis ipsum nisi. Etiam hendrerit convallis odio et ornare.
+Nunc eleifend, urna vitae porttitor euismod, libero quam dictum est, nec placerat sapien purus non erat. Morbi sit amet dui lorem. Curabitur molestie sit amet sapien sed elementum. Quisque luctus, massa ac scelerisque euismod, urna quam porttitor urna, vel aliquet sem est in urna. Curabitur eleifend imperdiet lectus at malesuada. Integer et nulla ut enim scelerisque mattis. Pellentesque augue felis, aliquam vulputate est ut, rutrum convallis metus.
+Morbi finibus accumsan arcu, ut sodales tortor tincidunt vel. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Nunc porta velit nisl, at gravida eros malesuada nec. Quisque at facilisis neque, a posuere tortor. Donec sed fringilla sem, sit amet vehicula ligula. Duis pulvinar, sapien sit amet fringilla ultrices, lorem urna blandit odio, non egestas enim orci id est. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Donec vel interdum lacus. Praesent ullamcorper nisl at eros mattis luctus.
+Cras venenatis nulla id neque scelerisque faucibus. Cras ultricies mollis augue, at pulvinar risus convallis sed. Morbi rhoncus urna arcu, sed sodales urna cursus et. Mauris convallis luctus malesuada. Aliquam mollis augue est, a hendrerit erat congue nec. Fusce sodales vulputate metus vel rutrum. Nam sed aliquet elit, sit amet pulvinar neque
+Etiam id erat ut lectus ultrices volutpat eget fringilla libero. Donec leo tortor, ornare facilisis neque et, tempus dictum lacus. Quisque ipsum mi, auctor quis leo eu, accumsan ornare nisl. Fusce elementum ut dui id dictum. Donec eget auctor diam. Fusce a tincidunt neque, volutpat maximus ante. Sed tempus orci nec lectus convallis, at hendrerit tellus tincidunt. Quisque et ultricies justo. Nulla mauris ex, pretium at nisi pharetra, vehicula imperdiet felis. Aenean elementum elit vel eleifend dictum. Suspendisse potenti. Pellentesque laoreet iaculis nunc, eget sollicitudin leo volutpat id. Cras in laoreet purus. In diam massa, sagittis ut justo sed, auctor feugiat eros.</string>
+    <string name="notes_label">Notes</string>
+    <string name="ddoption_view_products">View saved products</string>
+    <string name="ddoption_settings">Settings</string>
+    <string name="ddoption_sort_by">Sort by...</string>
+    <string name="ddoption_edit">Edit</string>
+    <string name="ddoption_delete">Delete</string>
+    <string name="product_notes_input">notes</string>
+</resources>

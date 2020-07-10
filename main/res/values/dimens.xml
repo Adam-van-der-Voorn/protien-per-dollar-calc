@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="std_label_centeralign_horimargin">24dp</dimen>
+    <dimen name="std_label_leftalign_leftmargin">24dp</dimen>
+    <dimen name="std_label_leftalign_rightmargin">48dp</dimen>
+    <dimen name="std_label_assoc_above_topmargin">18dp</dimen>
+    <dimen name="std_label_nonassoc_above_topmargin">48dp</dimen>
+    <dimen name="std_label_topmargin">24dp</dimen>
+    <dimen name="std_label_vertmargin">24dp</dimen>
+</resources>
