@@ -93,7 +93,7 @@ public class MainActivity extends AppCompatActivity {
         if (savedProducts.length() != 0) {
             try {
                 BufferedReader in = new BufferedReader(new FileReader(savedProducts));
-                int productsAmount = Integer.valueOf(in.readLine());
+                int productsAmount = Integer.parseInt(in.readLine());
                 for (int i = 0; i < productsAmount; i++) {
                     Product tmp = new Product(in);
                     GlobalData.savedProducts.put(tmp.getName(), tmp);

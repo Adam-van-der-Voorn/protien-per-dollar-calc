@@ -11,6 +11,4 @@ class GlobalData extends Application {
     static String savedProductsFN = "saved_products.txt";
     static Map<String, Product> savedProducts = new HashMap<>();
     static TrieMap<Product> savedProductTrie = new TrieMap<>();
-
-
 }
