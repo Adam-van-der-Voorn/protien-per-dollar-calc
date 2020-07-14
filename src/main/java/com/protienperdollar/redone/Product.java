@@ -7,7 +7,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Product implements Serializable {
-    private int noteNewLines;
+    private int noteLines = 1;
     private String name, notes;
     private float price, weight, proteinPer100g, proteinPerDollar, pricePerKilo;
 
@@ -22,23 +22,26 @@ public class Product implements Serializable {
 
         Matcher m = Pattern.compile("\r\n|\r|\n").matcher(notes);
         while (m.find()) {
-            noteNewLines++;
+            noteLines++;
         }
     }
 
     public Product(BufferedReader in) throws IOException {
         this.name = in.readLine();
-        this.noteNewLines = Integer.valueOf(in.readLine());
+        this.noteLines = Integer.parseInt(in.readLine());
         StringBuilder str = new StringBuilder();
-        for (int i = 0; i <= noteNewLines; i++) {
+        for (int i = 0; i < noteLines; i++) {
             str.append(in.readLine());
+            if (i < noteLines) {
+                str.append("\n");
+            }
         }
         this.notes = str.toString();
-        this.price = Float.valueOf(in.readLine());
-        this.weight = Float.valueOf(in.readLine());
-        this.proteinPer100g = Float.valueOf(in.readLine());
-        this.proteinPerDollar = Float.valueOf(in.readLine());
-        this.pricePerKilo = Float.valueOf(in.readLine());
+        this.price = Float.parseFloat(in.readLine());
+        this.weight = Float.parseFloat(in.readLine());
+        this.proteinPer100g = Float.parseFloat(in.readLine());
+        this.proteinPerDollar = Float.parseFloat(in.readLine());
+        this.pricePerKilo = Float.parseFloat(in.readLine());
     }
 
     public static float calculatePPD(float price, float weight, float proteinPer100g) {
@@ -99,7 +102,22 @@ public class Product implements Serializable {
     }
     public float getPricePerKilo() { return pricePerKilo; }
 
-    public String toString() {
-        return name + "\n" + noteNewLines + "\n" + notes + "\n" + price + "\n" + weight + "\n" + proteinPer100g + "\n" + proteinPerDollar + "\n" + pricePerKilo + "\n";
+    public String getData() {
+        return name + "\n" + noteLines + "\n" + notes + "\n" + price + "\n" + weight + "\n" + proteinPer100g + "\n" + proteinPerDollar + "\n" + pricePerKilo + "\n";
+    }
+
+    public boolean equals(Object other) {
+        if (other.getClass().equals(getClass())) {
+            Product otherProduct = (Product) other;
+            if (otherProduct.getName().equals(getName()) &&
+            otherProduct.getProteinPer100g() == getProteinPer100g()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public int hashCode() {
+        return name.hashCode() * String.valueOf(proteinPer100g).hashCode();
     }
 }

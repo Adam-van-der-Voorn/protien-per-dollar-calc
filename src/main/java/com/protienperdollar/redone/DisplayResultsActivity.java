@@ -17,6 +17,7 @@ import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
+import java.nio.file.Paths;
 import java.util.Map;
 
 
@@ -64,9 +65,9 @@ public class DisplayResultsActivity extends AppCompatActivity {
         out.write(GlobalData.savedProducts.size() + "\n");
         Log.v(TAG, String.valueOf(GlobalData.savedProducts.size()));
         for (Product product : GlobalData.savedProducts.values()) {
-            String productData = product.toString();
+            String productData = product.getData();
             Log.v(TAG, productData);
-            out.write(product.toString());
+            out.write(productData);
         }
         out.close();
     }

@@ -7,35 +7,37 @@ import android.view.MenuItem;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.protienperdollar.redone.R;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ProductListActivity extends AppCompatActivity implements ProductListAdapter.ProductClickListener {
     static final String EXTRA_MESSAGE = "com.example.protienperdollar.";
-    RecyclerView recyclerView;
+    ProductListAdapter adapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_product_list);
 
-        setSupportActionBar((Toolbar) findViewById(R.id.toolbarProductList));
+        setSupportActionBar(findViewById(R.id.toolbarProductList));
 
-        recyclerView = findViewById(R.id.productsRecyclerView);
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-    }
-
-    public void onStart() {
-        super.onStart();
-        recyclerView.setAdapter(new ProductListAdapter(this));
+        RecyclerView recyclerView = findViewById(R.id.productList);
+        adapter = new ProductListAdapter();
+        adapter.setClickListener(this);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.setAdapter(adapter);
+        adapter.submitList(new ArrayList<>(GlobalData.savedProducts.values()));
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.activity_product_list_toolbar, menu);
-
         return true;
     }
 
@@ -50,9 +52,13 @@ public class ProductListActivity extends AppCompatActivity implements ProductLis
     }
 
     @Override
-    public void onProductClick(String productName) {
+    public void onProductClick(Product product) {
         Intent intent = new Intent(this, ProductDetailsActivity.class);
-        intent.putExtra(EXTRA_MESSAGE + "NAME", productName);
+        intent.putExtra(EXTRA_MESSAGE + "NAME", product.getName());
         startActivity(intent);
     }
+
+    //public void onSearch(String search) {
+    //    adapter.submitList(GlobalData.savedProductTrie.search(search));
+    //}
 }

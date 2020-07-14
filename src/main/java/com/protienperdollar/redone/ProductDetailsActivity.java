@@ -10,6 +10,11 @@ import androidx.appcompat.widget.Toolbar;
 
 import com.protienperdollar.redone.R;
 
+import org.w3c.dom.Text;
+
+import java.util.Locale;
+import java.util.Objects;
+
 public class ProductDetailsActivity extends AppCompatActivity {
     Product product;
     @Override
@@ -17,7 +22,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_product_details);
 
-        setSupportActionBar((Toolbar) findViewById(R.id.toolbarProductDetails));
+        setSupportActionBar(findViewById(R.id.toolbarProductDetails));
 
 
         String productName = getIntent().getStringExtra(ProductListActivity.EXTRA_MESSAGE + "NAME");
@@ -47,12 +52,14 @@ public class ProductDetailsActivity extends AppCompatActivity {
     }
 
     private void setDetails() {
-        getSupportActionBar().setTitle(product.getName());
+        Objects.requireNonNull(getSupportActionBar()).setTitle(product.getName());
         TextView ppdLabel = findViewById(R.id.ppdLabel);
+        TextView notesBox = findViewById(R.id.notes);
         TextView pp100gLabel = findViewById(R.id.pp100gLabel);
         TextView ppkLabel = findViewById(R.id.ppkLabel);
-        ppdLabel.setText(String.format("%.1f", product.getProteinPerDollar()) + "g");
-        pp100gLabel.setText(String.format("%.1f", product.getProteinPer100g()) + "g");
-        ppkLabel.setText("$" + String.format("%.2f", product.getPricePerKilo()));
+        ppdLabel.setText(String.format(Locale.ENGLISH, "%.1fg", product.getProteinPerDollar()));
+        notesBox.setText(product.getNotes());
+        pp100gLabel.setText(String.format(Locale.ENGLISH,"%.1fg", product.getProteinPer100g()));
+        ppkLabel.setText(String.format(Locale.ENGLISH,"$%.2f", product.getPricePerKilo()));
     }
 }

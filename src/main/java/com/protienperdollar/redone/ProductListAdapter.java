@@ -5,32 +5,55 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.DiffUtil;
+import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.protienperdollar.redone.R;
+import java.util.List;
+import java.util.Locale;
 
-import java.util.Iterator;
+public class ProductListAdapter extends ListAdapter<Product, ProductListAdapter.ProductViewHolder> {
+    private ProductClickListener productClickListener;
 
-public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.ViewHolder> {
-    String[] dataSet;
-    ProductClickListener productClickListener;
+    public ProductListAdapter() {
+        super(new DiffUtil.ItemCallback<Product>() {
+            @Override
+            public boolean areItemsTheSame(@NonNull Product oldItem, @NonNull Product newItem) {
+                return oldItem.getName().equals(newItem.getName());
+            }
 
-    public ProductListAdapter(ProductClickListener productClickListener) {
-        this.productClickListener = productClickListener;
-        dataSet = new String[GlobalData.savedProducts.size()];
-        Iterator<String> iter = GlobalData.savedProducts.keySet().iterator();
-        for (int i = 0; i < dataSet.length; i++) {
-            dataSet[i] = iter.next();
-        }
+            @Override
+            public boolean areContentsTheSame(@NonNull Product oldItem, @NonNull Product newItem) {
+                return oldItem.equals(newItem);
+            }
+        });
+    }
+
+    // Called when RecyclerView needs a new RecyclerView.ViewHolder of products to represent an item.
+    @NonNull
+    @Override
+    public ProductViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        // create a new view
+        View listElementView = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.product_in_list, parent, false);
+        return new ProductViewHolder(listElementView, getCurrentList(), productClickListener);
+    }
+
+    // Called by RecyclerView to display the data at the specified position.
+    @Override
+    public void onBindViewHolder(ProductViewHolder holder, int position) {
+        Product product = getItem(position);
+        holder.bindTo(product);
     }
 
     // Provide a reference to the views for each data item
-    public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    public static class ProductViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         public TextView productName, productPPD;
         public ProductClickListener productClickListener;
-        private String[] dataSet;
+        private List<Product> dataSet;
 
-        public ViewHolder(View v, String[] dataSet, ProductClickListener productClickListener) {
+        public ProductViewHolder(View v, List<Product> dataSet, ProductClickListener productClickListener) {
             super(v);
             productName = v.findViewById(R.id.productName);
             productPPD = v.findViewById(R.id.productPPD);
@@ -39,39 +62,22 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
             itemView.setOnClickListener(this);
         }
 
+        public void bindTo(Product product) {
+            productName.setText(product.getName());
+            productPPD.setText(String.format(Locale.ENGLISH,"%.1f", product.getProteinPerDollar()));
+        }
+
         @Override
         public void onClick(View view) {
-
-            productClickListener.onProductClick(dataSet[getAdapterPosition()]);
+            productClickListener.onProductClick(dataSet.get(getAdapterPosition()));
         }
     }
 
-    // Create new views (invoked by the layout manager)
-    @Override
-    public ProductListAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        // create a new view
-        View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.product_in_list, parent, false);
-
-        ViewHolder vh = new ViewHolder(view, dataSet, productClickListener);
-        return vh;
-    }
-
-    // Replace the contents of a view (invoked by the layout manager)
-    @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
-        holder.productName.setText(dataSet[position]);
-        float productPPD = GlobalData.savedProducts.get(dataSet[position]).getProteinPerDollar();
-        holder.productPPD.setText(String.format("%.1fg", productPPD));
-    }
-
-    // Return the size of your dataset (invoked by the layout manager)
-    @Override
-    public int getItemCount() {
-        return dataSet.length;
+    public void setClickListener(ProductClickListener p) {
+        productClickListener = p;
     }
 
     public interface ProductClickListener {
-        void onProductClick(String productName);
+        void onProductClick(Product product);
     }
 }
