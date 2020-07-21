@@ -28,8 +28,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /* TODO:
-* > add search functionality to the saved products (trie)
-* > add the ability to delete and edit individual products.
+* > Trie crashes sif searching for only an emoji
 * >
 * */
 public class MainActivity extends AppCompatActivity {
