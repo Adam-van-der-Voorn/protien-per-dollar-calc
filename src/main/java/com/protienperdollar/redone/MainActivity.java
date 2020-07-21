@@ -97,7 +97,7 @@ public class MainActivity extends AppCompatActivity {
                 for (int i = 0; i < productsAmount; i++) {
                     Product tmp = new Product(in);
                     GlobalData.savedProducts.put(tmp.getName(), tmp);
-                    //GlobalData.savedProductTrie.put(tmp.getName(), tmp);
+                    GlobalData.savedProductTrie.put(tmp.getName(), tmp);
                 }
                 in.close();
             } catch (IOException e) {

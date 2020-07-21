@@ -11,13 +11,13 @@ public class Product implements Serializable {
     private String name, notes;
     private float price, weight, proteinPer100g, proteinPerDollar, pricePerKilo;
 
-    public Product(String name, String notes, float price, float weight, float proteinPer100g, float proteinPerDollar) {
+    public Product(String name, String notes, float price, float weight, float proteinPer100g) {
         this.name = name;
         this.notes = notes;
         this.price = price;
         this.weight = weight;
         this.proteinPer100g = proteinPer100g;
-        this.proteinPerDollar = proteinPerDollar;
+        this.proteinPerDollar = calculatePPD(price, weight, proteinPer100g);
         this.pricePerKilo = calculatePPK(price, weight);
 
         Matcher m = Pattern.compile("\r\n|\r|\n").matcher(notes);
@@ -32,7 +32,7 @@ public class Product implements Serializable {
         StringBuilder str = new StringBuilder();
         for (int i = 0; i < noteLines; i++) {
             str.append(in.readLine());
-            if (i < noteLines) {
+            if (i < noteLines-1) {
                 str.append("\n");
             }
         }

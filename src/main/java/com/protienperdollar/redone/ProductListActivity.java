@@ -2,18 +2,18 @@ package com.protienperdollar.redone;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.EditText;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.DefaultItemAnimator;
-import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class ProductListActivity extends AppCompatActivity implements ProductListAdapter.ProductClickListener {
     static final String EXTRA_MESSAGE = "com.example.protienperdollar.";
@@ -33,6 +33,16 @@ public class ProductListActivity extends AppCompatActivity implements ProductLis
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(adapter);
         adapter.submitList(new ArrayList<>(GlobalData.savedProducts.values()));
+
+        EditText searchBar = findViewById(R.id.productSearchInput);
+        searchBar.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                onSearch(s.toString());
+            }
+            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+            @Override public void afterTextChanged(Editable s) { }
+        });
     }
 
     @Override
@@ -58,7 +68,10 @@ public class ProductListActivity extends AppCompatActivity implements ProductLis
         startActivity(intent);
     }
 
-    //public void onSearch(String search) {
-    //    adapter.submitList(GlobalData.savedProductTrie.search(search));
-    //}
+    public void onSearch(String search) {
+        if (search.equals("")) {
+            adapter.submitList(new ArrayList<>(GlobalData.savedProducts.values()));
+        }
+        adapter.submitList(GlobalData.savedProductTrie.search(search));
+    }
 }

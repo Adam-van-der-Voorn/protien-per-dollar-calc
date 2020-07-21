@@ -18,6 +18,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.nio.file.Paths;
+import java.util.Collection;
+import java.util.Locale;
 import java.util.Map;
 
 
@@ -38,7 +40,7 @@ public class DisplayResultsActivity extends AppCompatActivity {
         protienPerDollar = Product.calculatePPD(price, weight, proteinPer100g);
 
         TextView textView = findViewById(R.id.resultsView);
-        textView.setText(String.format("%.1f", protienPerDollar) + "g");
+        textView.setText(String.format(Locale.ENGLISH, "%.1fg", protienPerDollar));
     }
 
     public void saveProduct(View view) {
@@ -47,10 +49,13 @@ public class DisplayResultsActivity extends AppCompatActivity {
         String productName = productInput.getText().toString();
         String productNotes = productNotesInput.getText().toString();
         if (!productName.equals("")) {
-            GlobalData.savedProducts.put(productName, new Product(productName, productNotes, price, weight, proteinPer100g, protienPerDollar));
+            Product product = new Product(productName, productNotes, price, weight, proteinPer100g);
+            GlobalData.savedProducts.put(productName, product);
+            GlobalData.savedProductTrie.put(productName, product);
             productInput.setEnabled(false);
+            productNotesInput.setEnabled(false);
             try {
-                saveProductsToFile(GlobalData.savedProducts);
+                saveProductsToFile(GlobalData.savedProducts.values());
                 Snackbar.make(view, "Product saved!", Snackbar.LENGTH_SHORT);
             }
             catch (IOException e) {
@@ -59,12 +64,12 @@ public class DisplayResultsActivity extends AppCompatActivity {
         }
     }
 
-    public void saveProductsToFile(Map<String, Product> products) throws IOException {
-        File savedProducts = new File(getFilesDir(), GlobalData.savedProductsFN);
-        FileWriter out = new FileWriter(savedProducts);
-        out.write(GlobalData.savedProducts.size() + "\n");
-        Log.v(TAG, String.valueOf(GlobalData.savedProducts.size()));
-        for (Product product : GlobalData.savedProducts.values()) {
+    public void saveProductsToFile(Collection<Product> products) throws IOException {
+        File productsOnDisk = new File(getFilesDir(), GlobalData.savedProductsFN);
+        FileWriter out = new FileWriter(productsOnDisk);
+        out.write(products.size() + "\n");
+        Log.v(TAG, String.valueOf(products.size()));
+        for (Product product : products) {
             String productData = product.getData();
             Log.v(TAG, productData);
             out.write(productData);
