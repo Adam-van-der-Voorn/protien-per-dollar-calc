@@ -1,9 +1,14 @@
 package com.protienperdollar.redone;
 
 import android.app.Application;
+import android.util.Log;
 
 import com.vandeadam.util.TrieMap;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 

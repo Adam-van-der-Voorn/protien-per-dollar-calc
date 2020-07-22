@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
+import com.protienperdollar.redone.util.IOFunctions;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -13,6 +14,8 @@ import com.vandeadam.util.NoAssociatedObjectsException;
 
 import org.w3c.dom.Text;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.Locale;
 import java.util.Objects;
 
@@ -49,6 +52,11 @@ public class ProductDetailsActivity extends AppCompatActivity {
                     GlobalData.savedProductTrie.remove(product.getName(), product);
                 } catch (NoAssociatedObjectsException e) {
                     throw new RuntimeException("attempting to remove a product that does not exist.");
+                }
+                try {
+                    IOFunctions.saveProductsToFile(GlobalData.savedProducts.values(), new File(getFilesDir(), GlobalData.savedProductsFN));
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
                 }
                 finish();
                 return true;

@@ -27,10 +27,10 @@ import java.io.Reader;
 import java.util.HashMap;
 import java.util.Map;
 
-// TODO this commit: singular deletion of products
+// TODO this commit: permanent deletion of products
 /* TODO other:
  * > I think Trie crashes if searching for only an emoji, havent fully tested
- * >
+ * > Fix GlobalData
  * */
 public class MainActivity extends AppCompatActivity {
     public static final String EXTRA_MESSAGE = "com.example.protienperdollar.";
