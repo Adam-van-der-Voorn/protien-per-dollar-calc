@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
@@ -17,7 +18,9 @@ import java.util.ArrayList;
 
 public class ProductListActivity extends AppCompatActivity implements ProductListAdapter.ProductClickListener {
     static final String EXTRA_MESSAGE = "com.example.protienperdollar.";
+    static final String TAG = "ProductListActivity";
     ProductListAdapter adapter;
+    EditText searchBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,17 +35,22 @@ public class ProductListActivity extends AppCompatActivity implements ProductLis
         recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(adapter);
-        adapter.submitList(new ArrayList<>(GlobalData.savedProducts.values()));
 
-        EditText searchBar = findViewById(R.id.productSearchInput);
+        searchBar = findViewById(R.id.productSearchInput);
         searchBar.addTextChangedListener(new TextWatcher() {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                onSearch(s.toString());
+                displayProducts(s.toString());
             }
             @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
             @Override public void afterTextChanged(Editable s) { }
         });
+    }
+
+    protected void onResume() {
+        super.onResume();
+        Log.d(TAG, "search bar contents (str): [" + searchBar.getText().toString() + "]");
+        displayProducts(searchBar.getText().toString());
     }
 
     @Override
@@ -68,10 +76,10 @@ public class ProductListActivity extends AppCompatActivity implements ProductLis
         startActivity(intent);
     }
 
-    public void onSearch(String search) {
+    public void displayProducts(String search) {
         if (search.equals("")) {
             adapter.submitList(new ArrayList<>(GlobalData.savedProducts.values()));
         }
-        adapter.submitList(GlobalData.savedProductTrie.search(search));
+        else adapter.submitList(GlobalData.savedProductTrie.search(search));
     }
 }

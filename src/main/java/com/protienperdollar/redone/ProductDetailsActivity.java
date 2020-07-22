@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.protienperdollar.redone.R;
+import com.vandeadam.util.NoAssociatedObjectsException;
 
 import org.w3c.dom.Text;
 
@@ -44,6 +45,11 @@ public class ProductDetailsActivity extends AppCompatActivity {
                 return true;
             case R.id.productDelete:
                 GlobalData.savedProducts.remove(product.getName());
+                try {
+                    GlobalData.savedProductTrie.remove(product.getName(), product);
+                } catch (NoAssociatedObjectsException e) {
+                    throw new RuntimeException("attempting to remove a product that does not exist.");
+                }
                 finish();
                 return true;
             default:

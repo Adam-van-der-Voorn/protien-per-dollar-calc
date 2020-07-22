@@ -27,10 +27,11 @@ import java.io.Reader;
 import java.util.HashMap;
 import java.util.Map;
 
-/* TODO:
-* > Trie crashes sif searching for only an emoji
-* >
-* */
+// TODO this commit: singular deletion of products
+/* TODO other:
+ * > I think Trie crashes if searching for only an emoji, havent fully tested
+ * >
+ * */
 public class MainActivity extends AppCompatActivity {
     public static final String EXTRA_MESSAGE = "com.example.protienperdollar.";
     private static final String TAG = "MainActivity";
