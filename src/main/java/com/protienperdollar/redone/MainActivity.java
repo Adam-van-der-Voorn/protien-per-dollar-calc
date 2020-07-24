@@ -27,9 +27,8 @@ import java.io.Reader;
 import java.util.HashMap;
 import java.util.Map;
 
-// TODO this commit: permanent deletion of products
+// TODO this commit: bugfix - Trie crashes if searching for only an emoji
 /* TODO other:
- * > I think Trie crashes if searching for only an emoji, havent fully tested
  * > Fix GlobalData
  * */
 public class MainActivity extends AppCompatActivity {
